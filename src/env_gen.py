@@ -1,4 +1,4 @@
-from utils import generate_random_string
+from utils import generate_random_string, write_to_file, DEFAULT_PATH
 
 
 class EnvGen:
@@ -38,7 +38,7 @@ class EnvGen:
             variable, value() if callable(value) else value
         )
 
-    def __generate_file_content(self, environment):
+    def __generate_env_file(self, environment, path=DEFAULT_PATH):
         content = ""
 
         variables = self.ENVIRONMENT_VARIABLE_MAP[environment]
@@ -46,12 +46,10 @@ class EnvGen:
         for key, value in variables.items():
             content += self.__create_environemt_variable(variable=key, value=value)
 
-        return content
+        write_to_file("{0}/{1}.env".format(path, environment), contents=content)
 
-    def write_env_file(self, environment):
-        env_file = open("{0}.env".format(environment), "w")
+    def generate_all_env_files(self, path=DEFAULT_PATH):
+        envs = self.ENVIRONMENT_MAP
 
-        env_file_contents = self.__generate_file_content(environment=environment)
-
-        env_file.write(env_file_contents)
-        env_file.close()
+        for env in envs:
+            self.__generate_env_file(env)

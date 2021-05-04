@@ -1,25 +1,20 @@
+from utils import write_to_file, DEFAULT_PATH
+
+
 class GitIgnoreGen:
     # Methods
 
-    def __generate_file_content(self):
+    def generate_gitignore_file(self, path=DEFAULT_PATH):
         content = """
-        *.env
-        *.log
-        *.pot
-        *.pyc
-        __pycache__
-        db.sqlite3
-        media
-        envs/
-        tmp/
-        """
+*.env
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
+envs/
+tmp/
+"""
 
-        return content
-
-    def write_git_ignore(self):
-        git_ignore = open(".gitignore", "w")
-
-        git_ignore_contents = self.__generate_file_content()
-
-        git_ignore.write(git_ignore_contents)
-        git_ignore.close()
+        write_to_file("{0}/.gitignore".format(path), contents=content)

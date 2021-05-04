@@ -1,9 +1,15 @@
+from utils import DEFAULT_PATH
 from env_gen import EnvGen
 from git_ignore_gen import GitIgnoreGen
+from docker_gen import DockerGen
+from nginx_gen import NginxGen
 
-envs = EnvGen().ENVIRONMENT_MAP
+path = DEFAULT_PATH
 
-for env in envs:
-    EnvGen().write_env_file(env)
+EnvGen().generate_all_env_files(path=path)
 
-GitIgnoreGen().write_git_ignore()
+GitIgnoreGen().generate_gitignore_file(path=path)
+
+NginxGen().generate_nginx_files(path=path)
+
+DockerGen().generate_docker_files(path=path)

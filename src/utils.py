@@ -13,6 +13,16 @@ DEFAULT_PROJECT_DIRECTORY = "project"
 
 DEFAULT_SERVER_PORT = 8000
 
+DEFAULT_DEBUG = True
+
+# Environments
+LOCAL = "local"
+DEV = "dev"
+STAGING = "staging"
+PROD = "prod"
+
+ENVIRONMENT_MAP = (LOCAL, DEV, STAGING, PROD)
+
 
 def generate_random_string(length=30):
     return "".join(random.choices(ascii_letters + digits + punctuation, k=length))

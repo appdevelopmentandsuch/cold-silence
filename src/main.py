@@ -10,7 +10,7 @@ from utils import (
     DEFAULT_PROJECT_DIRECTORY,
 )
 import argparse
-import os
+import subprocess
 
 parser = argparse.ArgumentParser()
 
@@ -59,25 +59,21 @@ try:
 
     version = django.__version__
     print("Proceeding using Django version: " + version)
-except:
+except Exception as e:
     try:
         print(
             "Can't find Django, attempting to install using `python3 -m pip install django`..."
         )
-        os.system("python3 -m pip install django")
+        subprocess.check_call(["python3", "-m", "pip", "install", "django"], shell=False)
         import django
 
         version = django.__version__
         print("Proceeding using Django version: " + version)
-    except:
+    except Exception as e:
         print("Unable to install Django, install Django before proceeding.")
         exit(1)
 
-os.system(
-    "mkdir -p {0} && cd {0} && django-admin startproject {1} .".format(
-        path, project_name
-    )
-)
+subprocess.check_call(["mkdir", "-p", path, "&&", "cd", path, "&&", "django-admin", "startproject", project_name, "."], shell=False)
 
 EnvGen().generate_all_env_files(path=path)
 

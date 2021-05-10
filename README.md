@@ -1,5 +1,7 @@
 # cold-silence
 
+[![CodeFactor](https://www.codefactor.io/repository/github/appdevelopmentandsuch/cold-silence/badge)](https://www.codefactor.io/repository/github/appdevelopmentandsuch/cold-silence)
+
 Start a new Django project sans boilerplate code.
 
 # Quickstart

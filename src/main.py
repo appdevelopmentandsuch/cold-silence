@@ -1,3 +1,7 @@
+from docker_gen import DockerGen
+from env_gen import EnvGen
+from git_ignore_gen import GitIgnoreGen
+from nginx_gen import NginxGen
 from utils import (
     DEFAULT_PATH,
     DEFAULT_SERVICE_NAME,
@@ -5,11 +9,8 @@ from utils import (
     DEFAULT_PROJECT_NAME,
     DEFAULT_PROJECT_DIRECTORY,
 )
-from env_gen import EnvGen
-from git_ignore_gen import GitIgnoreGen
-from docker_gen import DockerGen
-from nginx_gen import NginxGen
 import argparse
+import os
 
 parser = argparse.ArgumentParser()
 
@@ -51,6 +52,31 @@ project_directory = (
     args.project_directory
     if args.project_directory is not None
     else DEFAULT_PROJECT_DIRECTORY
+)
+
+try:
+    import django
+
+    version = django.__version__
+    print("Proceeding using Django version: " + version)
+except:
+    try:
+        print(
+            "Can't find Django, attempting to install using `python3 -m pip install django`..."
+        )
+        os.system("python3 -m pip install django")
+        import django
+
+        version = django.__version__
+        print("Proceeding using Django version: " + version)
+    except:
+        print("Unable to install Django, install Django before proceeding.")
+        exit(1)
+
+os.system(
+    "mkdir -p {0} && cd {0} && django-admin startproject {1} .".format(
+        path, project_name
+    )
 )
 
 EnvGen().generate_all_env_files(path=path)

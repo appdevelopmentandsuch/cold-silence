@@ -11,6 +11,7 @@ from utils import (
 )
 import argparse
 import subprocess
+import sys
 
 parser = argparse.ArgumentParser()
 
@@ -64,7 +65,9 @@ except Exception as e:
         print(
             "Can't find Django, attempting to install using `python3 -m pip install django`..."
         )
-        subprocess.check_call(["python3", "-m", "pip", "install", "django"], shell=False)
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "django"], shell=False
+        )
         import django
 
         version = django.__version__
@@ -73,7 +76,22 @@ except Exception as e:
         print("Unable to install Django, install Django before proceeding.")
         exit(1)
 
-subprocess.check_call(["mkdir", "-p", path, "&&", "cd", path, "&&", "django-admin", "startproject", project_name, "."], shell=False)
+subprocess.check_call(
+    [
+        "/bin/mkdir",
+        "-p",
+        path,
+        "&&",
+        "/bin/cd",
+        path,
+        "&&",
+        "django-admin",
+        "startproject",
+        project_name,
+        ".",
+    ],
+    shell=False,
+)
 
 EnvGen().generate_all_env_files(path=path)
 

@@ -1,6 +1,7 @@
 from utils import write_to_file, DEFAULT_PATH, DEFAULT_PROJECT_NAME, ENGINE_SQLITE3
 import os
 
+
 class SettingsGen:
     def __generate_database_config(self, engine):
         db_config = (
@@ -25,6 +26,7 @@ DATABASES = {{
     """.format(
             engine, db_config
         )
+
     def __generate_settings_file_content(
         self, project_name=DEFAULT_PROJECT_NAME, engine=ENGINE_SQLITE3
     ):
@@ -33,7 +35,9 @@ DATABASES = {{
 
             django_version = django.VERSION
 
-            django_major_version = "{0}.{1}".format(django_version[0], django_version[1])
+            django_major_version = "{0}.{1}".format(
+                django_version[0], django_version[1]
+            )
 
             db_config = self.__generate_database_config(engine=engine)
 
@@ -151,7 +155,10 @@ STATIC_URL = "/static/"
         return content
 
     def generate_settings_file(
-        self, path=DEFAULT_PATH, project_name=DEFAULT_PROJECT_NAME, engine=ENGINE_SQLITE3
+        self,
+        path=DEFAULT_PATH,
+        project_name=DEFAULT_PROJECT_NAME,
+        engine=ENGINE_SQLITE3,
     ):
         settings_file_path = "{0}/settings.py".format(path)
 

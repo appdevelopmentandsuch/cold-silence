@@ -2,6 +2,7 @@ from docker_gen import DockerGen
 from env_gen import EnvGen
 from git_ignore_gen import GitIgnoreGen
 from nginx_gen import NginxGen
+from pathlib import Path
 from settings_gen import SettingsGen
 from subprocess import Popen as pop
 from utils import (
@@ -12,9 +13,21 @@ from utils import (
     DEFAULT_PROJECT_DIRECTORY,
 )
 import argparse
-import os
-import errno
-import sys
+import pip
+
+
+def __print_message(message):
+    if args.verbose:
+        print(message)
+
+
+def __begin_gen_message(message):
+    __print_message("Generating {0} ...".format(message))
+
+
+def __end_gen_message(message):
+    __print_message("{0} generated!".format(message))
+
 
 parser = argparse.ArgumentParser()
 
@@ -71,7 +84,7 @@ except Exception as e:
             "Can't find Django, attempting to install using `python3 -m pip install django`..."
         )
 
-        pop([sys.executable, "-m", "pip", "install", "django"], shell=False)
+        pip.main(["install", "django"])
 
         import django
 
@@ -83,73 +96,55 @@ except Exception as e:
 
 out_path = path + "/" + project_name
 
-if args.verbose:
-    print("Creating directory " + out_path + " ...")
+__print_message("Creating directory " + out_path + " ...")
 
-if not os.path.exists(os.path.dirname(out_path)):
-        try:
-            os.makedirs(os.path.dirname(out_path))
-        except OSError as exc:  # Guard against race condition
-            if exc.errno != errno.EEXIST:
-                raise
+Path(out_path).mkdir(parents=True, exist_ok=True)
 
-if not os.path.exists(os.path.dirname(out_path)):
+if not Path(out_path).exists:
     print("{0} was not created, exiting...")
     exit(1)
 
-if args.verbose:
-    print(out_path + " created!")
+__print_message(out_path + " created!")
 
-if args.verbose:
-    print("Generating Django project " + project_name + " in " + out_path + " ...")
+__begin_gen_message("Django project " + project_name + " in " + out_path)
 
+try:
+    pop(["django-admin", "startproject", project_name,], shell=False, cwd=out_path)
+except Exception as e:
+    print(e)
+    exit(1)
 
-pop(
-    ["django-admin", "startproject", project_name,], shell=False, cwd=out_path
-)
-
-if args.verbose:
-    print("Django project " + project_name + " generated!")
+__end_gen_message("Django project " + project_name)
 
 settings_path = out_path + "/" + project_name
 
-if args.verbose:
-    print("Generating settings file...")
+__begin_gen_message("Settings file")
 
 SettingsGen().generate_settings_file(path=settings_path)
 
-if args.verbose:
-    print("Settings file generated!")
+__end_gen_message("Settings file")
 
-
-if args.verbose:
-    print("Generating environment variable files...")
+__begin_gen_message("Environment variable files")
 
 EnvGen().generate_all_env_files(path=path)
 
-if args.verbose:
-    print("Environment variable files generated!")
+__end_gen_message("Environment variable files")
 
-if args.verbose:
-    print("Generating Git ignore file...")
+__begin_gen_message("Git ignore file")
 
 GitIgnoreGen().generate_gitignore_file(path=path)
 
-if args.verbose:
-    print("Git ignore file generated!")
+__end_gen_message("Git ignore file")
 
-if args.verbose:
-    print("Generating Nginx files...")
+__begin_gen_message("Nginx files")
 
 NginxGen().generate_nginx_files(
     path=path, server_port=server_port, service_name=service_name
 )
 
-if args.verbose:
-    print("Nginx files generated!")
+__end_gen_message("Nginx files")
 
-if args.verbose:
-    print("Generating Dockerfiles and docker-compose files...")
+__begin_gen_message("Dockerfiles and docker-compose files")
 
 DockerGen().generate_docker_files(
     path=path,
@@ -159,9 +154,7 @@ DockerGen().generate_docker_files(
     service_name=service_name,
 )
 
-
-if args.verbose:
-    print("Dockerfiles and docker-compose files generated!")
+__end_gen_message("Dockerfiles and docker-compose files")
 
 print("Project generation complete, you're ready to get started!")
 print("Happy programming!")

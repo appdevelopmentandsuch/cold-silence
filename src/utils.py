@@ -15,6 +15,14 @@ DEFAULT_SERVER_PORT = 8000
 
 DEFAULT_DEBUG = True
 
+ENGINE_SQLITE3 = "sqlite3"
+
+ENGINE_POSTGRESQL = "postgresql"
+
+ENGINE_MYSQL = "mysql"
+
+ENGINE_ORACLE = "oracle"
+
 # Environments
 LOCAL = "local"
 DEV = "dev"
@@ -36,8 +44,5 @@ def write_to_file(file_path, contents):
             if exc.errno != errno.EEXIST:
                 raise
 
-    out_file = open(file_path, "w")
-
-    out_file.write(contents)
-
-    out_file.close()
+    with open(file_path, "w") as out_file:
+        out_file.write(contents)

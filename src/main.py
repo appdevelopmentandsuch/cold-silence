@@ -2,6 +2,7 @@ from docker_gen import DockerGen
 from env_gen import EnvGen
 from git_ignore_gen import GitIgnoreGen
 from nginx_gen import NginxGen
+from settings_gen import SettingsGen
 from subprocess import Popen as pop
 from utils import (
     DEFAULT_PATH,
@@ -11,6 +12,8 @@ from utils import (
     DEFAULT_PROJECT_DIRECTORY,
 )
 import argparse
+import os
+import errno
 import sys
 
 parser = argparse.ArgumentParser()
@@ -80,19 +83,44 @@ except Exception as e:
 
 out_path = path + "/" + project_name
 
-pop(
-    ["/bin/mkdir", "-p", out_path,], shell=False,
-)
-
 if args.verbose:
     print("Creating directory " + out_path + " ...")
 
-pop(
-    ["django-admin", "startproject", project_name, out_path,], shell=False,
-)
+if not os.path.exists(os.path.dirname(out_path)):
+        try:
+            os.makedirs(os.path.dirname(out_path))
+        except OSError as exc:  # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
+
+if not os.path.exists(os.path.dirname(out_path)):
+    print("{0} was not created, exiting...")
+    exit(1)
+
+if args.verbose:
+    print(out_path + " created!")
 
 if args.verbose:
     print("Generating Django project " + project_name + " in " + out_path + " ...")
+
+
+pop(
+    ["django-admin", "startproject", project_name,], shell=False, cwd=out_path
+)
+
+if args.verbose:
+    print("Django project " + project_name + " generated!")
+
+settings_path = out_path + "/" + project_name
+
+if args.verbose:
+    print("Generating settings file...")
+
+SettingsGen().generate_settings_file(path=settings_path)
+
+if args.verbose:
+    print("Settings file generated!")
+
 
 if args.verbose:
     print("Generating environment variable files...")

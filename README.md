@@ -13,7 +13,7 @@ python3 main.py
 
 ```bash
 cd src
-python3 main.py --server_port 8080 --project_name my_project --service_name my_service --project_directory my_project
+python3 main.py --server_port 8080 --project_name my_project --service_name my_service --project_directory my_project --verbose
 ```
 
 # Output
@@ -29,7 +29,14 @@ python3 main.py --server_port 8080 --project_name my_project --service_name my_s
 │   ├── prod.env
 │   ├── project
 │   │   ├── Dockerfile
-│   │   └── Dockerfile.prod
+│   │   ├── Dockerfile.prod
+│   │   ├── manage.py
+│   │   └── project
+│   │       ├── asgi.py
+│   │       ├── __init__.py
+│   │       ├── settings.py
+│   │       ├── urls.py
+│   │       └── wsgi.py
 │   └── staging.env
 ```
 

@@ -2,6 +2,7 @@ from docker_gen import DockerGen
 from env_gen import EnvGen
 from git_ignore_gen import GitIgnoreGen
 from nginx_gen import NginxGen
+from subprocess import Popen as pop
 from utils import (
     DEFAULT_PATH,
     DEFAULT_SERVICE_NAME,
@@ -10,7 +11,6 @@ from utils import (
     DEFAULT_PROJECT_DIRECTORY,
 )
 import argparse
-import subprocess
 import sys
 
 parser = argparse.ArgumentParser()
@@ -67,7 +67,9 @@ except Exception as e:
         print(
             "Can't find Django, attempting to install using `python3 -m pip install django`..."
         )
-        subprocess.run([sys.executable, "-m", "pip", "install", "django"], shell=False)
+
+        pop([sys.executable, "-m", "pip", "install", "django"], shell=False)
+
         import django
 
         version = django.__version__
@@ -78,13 +80,14 @@ except Exception as e:
 
 out_path = path + "/" + project_name
 
-subprocess.run(
-    ["mkdir", "-p", out_path,], shell=False,
+pop(
+    ["/bin/mkdir", "-p", out_path,], shell=False,
 )
+
 if args.verbose:
     print("Creating directory " + out_path + " ...")
 
-subprocess.run(
+pop(
     ["django-admin", "startproject", project_name, out_path,], shell=False,
 )
 

@@ -94,7 +94,7 @@ except Exception as e:
         print("Unable to install Django, install Django before proceeding.")
         exit(1)
 
-out_path = path + "/" + project_name
+out_path = path
 
 __print_message("Creating directory " + out_path + " ...")
 
@@ -116,7 +116,8 @@ except Exception as e:
 
 __end_gen_message("Django project " + project_name)
 
-settings_path = out_path + "/" + project_name
+# Get inside the Django project's main directory
+settings_path = out_path + "/" + project_name + "/" + project_name
 
 __begin_gen_message("Settings file")
 

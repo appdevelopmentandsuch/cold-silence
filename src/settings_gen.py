@@ -12,7 +12,7 @@ class SettingsGen:
 "PORT": get_env_value("DB_PORT"),
 """
             if engine is not ENGINE_SQLITE3
-            else None
+            else ""
         )
 
         return """

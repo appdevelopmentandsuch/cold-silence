@@ -39,6 +39,8 @@ parser.add_argument(
     type=str,
 )
 
+parser.add_argument("--verbose", help="Display verbose output", action="store_true")
+
 args = parser.parse_args()
 
 path = args.path if args.path is not None else DEFAULT_PATH
@@ -65,9 +67,7 @@ except Exception as e:
         print(
             "Can't find Django, attempting to install using `python3 -m pip install django`..."
         )
-        subprocess.check_call(
-            [sys.executable, "-m", "pip", "install", "django"], shell=False
-        )
+        subprocess.run([sys.executable, "-m", "pip", "install", "django"], shell=False)
         import django
 
         version = django.__version__
@@ -76,30 +76,49 @@ except Exception as e:
         print("Unable to install Django, install Django before proceeding.")
         exit(1)
 
-subprocess.check_call(
-    [
-        "/bin/mkdir",
-        "-p",
-        path,
-        "&&",
-        "/bin/cd",
-        path,
-        "&&",
-        "django-admin",
-        "startproject",
-        project_name,
-        ".",
-    ],
-    shell=False,
+out_path = path + "/" + project_name
+
+subprocess.run(
+    ["mkdir", "-p", out_path,], shell=False,
 )
+if args.verbose:
+    print("Creating directory " + out_path + " ...")
+
+subprocess.run(
+    ["django-admin", "startproject", project_name, out_path,], shell=False,
+)
+
+if args.verbose:
+    print("Generating Django project " + project_name + " in " + out_path + " ...")
+
+if args.verbose:
+    print("Generating environment variable files...")
 
 EnvGen().generate_all_env_files(path=path)
 
+if args.verbose:
+    print("Environment variable files generated!")
+
+if args.verbose:
+    print("Generating Git ignore file...")
+
 GitIgnoreGen().generate_gitignore_file(path=path)
+
+if args.verbose:
+    print("Git ignore file generated!")
+
+if args.verbose:
+    print("Generating Nginx files...")
 
 NginxGen().generate_nginx_files(
     path=path, server_port=server_port, service_name=service_name
 )
+
+if args.verbose:
+    print("Nginx files generated!")
+
+if args.verbose:
+    print("Generating Dockerfiles and docker-compose files...")
 
 DockerGen().generate_docker_files(
     path=path,
@@ -108,3 +127,10 @@ DockerGen().generate_docker_files(
     server_port=server_port,
     service_name=service_name,
 )
+
+
+if args.verbose:
+    print("Dockerfiles and docker-compose files generated!")
+
+print("Project generation complete, you're ready to get started!")
+print("Happy programming!")

@@ -38,12 +38,12 @@ class EnvGen:
         )
 
     def __generate_env_file(self, environment, path=DEFAULT_PATH):
-        content = ""
-
         variables = self.ENVIRONMENT_VARIABLE_MAP[environment]
 
-        for key, value in variables.items():
-            content += self.__create_environemt_variable(variable=key, value=value)
+        content = "".join(
+            self.__create_environemt_variable(variable=key, value=value)
+            for key, value in variables.items()
+        )
 
         write_to_file("{0}/{1}.env".format(path, environment), contents=content)
 
@@ -51,4 +51,4 @@ class EnvGen:
         envs = ENVIRONMENT_MAP
 
         for env in envs:
-            self.__generate_env_file(env)
+            self.__generate_env_file(env, path)

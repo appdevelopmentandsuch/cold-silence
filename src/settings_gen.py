@@ -162,9 +162,6 @@ STATIC_URL = "/static/"
     ):
         settings_file_path = "{0}/settings.py".format(path)
 
-        # if os.path.exists(settings_file_path):
-        #     os.remove(settings_file_path)
-
         content = self.__generate_settings_file_content(
             project_name=project_name, engine=engine
         )

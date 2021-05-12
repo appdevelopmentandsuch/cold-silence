@@ -14,7 +14,7 @@ from utils import (
 )
 import argparse
 import pip
-import time
+
 
 def __print_message(message):
     if args.verbose:
@@ -109,7 +109,11 @@ __print_message(out_path + " created!")
 __begin_gen_message("Django project " + project_name + " in " + out_path)
 
 try:
-    op = pop(["/usr/bin/python3", "-m", "django", "startproject", project_name,], shell=False, cwd=out_path)
+    op = pop(
+        ["/usr/bin/python3", "-m", "django", "startproject", project_name,],
+        shell=False,
+        cwd=out_path,
+    )
     # https://stackoverflow.com/a/2837319
     op.communicate()
 except Exception as e:

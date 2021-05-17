@@ -1,8 +1,8 @@
 clean:
-	rm -rf project_output
-	rm -f .coverage
-	rm -f coverage.xml
-	rm -rf .pytest_cache
+	rm -r project_output
+	rm .coverage
+	rm coverage.xml
+	rm -r .pytest_cache
 
 test:
 	pytest --cov cold_silence --cov-report=xml

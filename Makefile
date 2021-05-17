@@ -20,5 +20,5 @@ setup:
 format:
 	black ./
 
-install_package:
+install:
 	pip install .

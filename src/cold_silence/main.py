@@ -1,11 +1,11 @@
-from docker_gen import DockerGen
-from env_gen import EnvGen
-from git_ignore_gen import GitIgnoreGen
-from nginx_gen import NginxGen
+from cold_silence.docker_gen import DockerGen
+from cold_silence.env_gen import EnvGen
+from cold_silence.git_ignore_gen import GitIgnoreGen
+from cold_silence.nginx_gen import NginxGen
 from pathlib import Path
-from settings_gen import SettingsGen
+from cold_silence.settings_gen import SettingsGen
 from subprocess import Popen as pop
-from utils import (
+from cold_silence.utils import (
     DEFAULT_PATH,
     DEFAULT_SERVICE_NAME,
     DEFAULT_SERVER_PORT,

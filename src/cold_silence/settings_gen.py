@@ -1,4 +1,4 @@
-from utils import write_to_file, DEFAULT_PATH, DEFAULT_PROJECT_NAME, ENGINE_SQLITE3
+from cold_silence.utils import write_to_file, DEFAULT_PATH, DEFAULT_PROJECT_NAME, ENGINE_SQLITE3
 import os
 
 

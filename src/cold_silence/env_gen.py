@@ -1,4 +1,4 @@
-from utils import (
+from cold_silence.utils import (
     generate_random_string,
     write_to_file,
     DEFAULT_PATH,

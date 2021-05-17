@@ -1,4 +1,4 @@
-from utils import (
+from cold_silence.utils import (
     write_to_file,
     DEFAULT_PATH,
     DEFAULT_PROJECT_DIRECTORY,

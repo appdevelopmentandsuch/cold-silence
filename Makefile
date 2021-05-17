@@ -16,3 +16,6 @@ build_default_project:
 
 install:
 	pip install -r requirements.txt
+
+format:
+	black ./

@@ -4,6 +4,7 @@ from cold_silence.git_ignore_gen import GitIgnoreGen
 from cold_silence.nginx_gen import NginxGen
 from pathlib import Path
 from cold_silence.settings_gen import SettingsGen
+from cold_silence.requirements_gen import RequirementsGen
 from subprocess import Popen as pop
 from cold_silence.utils import (
     DEFAULT_PATH,
@@ -11,17 +12,14 @@ from cold_silence.utils import (
     DEFAULT_SERVER_PORT,
     DEFAULT_PROJECT_NAME,
     DEFAULT_PROJECT_DIRECTORY,
+    DEFAULT_CONFIG,
+    ENGINE_SQLITE3,
+    verify_or_install_django,
+    verify_or_install_gunicorn,
+    verify_or_install_rest_framework,
 )
 import argparse
-import pip
 import sys
-
-
-def __verify_django_version():
-    import django
-
-    version = django.__version__
-    print("Proceeding using Django version: " + version)
 
 
 def __print_message(message, verbose):
@@ -65,6 +63,18 @@ def parse_args(args):
         type=str,
     )
 
+    parser.add_argument(
+        "--engine",
+        help="Database to use for the project, the default is sqlite.",
+        type=str,
+    )
+
+    parser.add_argument(
+        "--rest_api",
+        help="Generate a REST API starter, by default this is disabled",
+        action="store_true",
+    )
+
     parser.add_argument("--verbose", help="Display verbose output", action="store_true")
 
     args = parser.parse_args(args)
@@ -85,40 +95,37 @@ def parse_args(args):
         else DEFAULT_PROJECT_DIRECTORY
     )
 
+    rest_api = args.rest_api if args.rest_api is not None else False
+
+    engine = args.engine if args.engine is not None else ENGINE_SQLITE3
+
     verbose = args.verbose
 
     return {
+        "engine": engine,
         "path": path,
-        "service_name": service_name,
-        "server_port": server_port,
-        "project_name": project_name,
         "project_directory": project_directory,
+        "project_name": project_name,
+        "rest_api": rest_api,
+        "server_port": server_port,
+        "service_name": service_name,
         "verbose": verbose,
     }
 
 
-def generate_project(
-    path=DEFAULT_PATH,
-    service_name=DEFAULT_SERVICE_NAME,
-    server_port=DEFAULT_SERVER_PORT,
-    project_name=DEFAULT_PROJECT_NAME,
-    project_directory=DEFAULT_PROJECT_DIRECTORY,
-    verbose=False,
-):
-    try:
-        __verify_django_version()
-    except Exception as e:
-        try:
-            print(
-                "Can't find Django, attempting to install using `python3 -m pip install django`..."
-            )
+def generate_project(config=DEFAULT_CONFIG):
+    verify_or_install_django()
+    verify_or_install_gunicorn()
+    verify_or_install_rest_framework()
 
-            pip.main(["install", "django"])
-            __verify_django_version()
-        except Exception as e:
-            print("Unable to install Django, install Django before proceeding.")
-            exit(1)
-    out_path = path
+    engine = config.get("engine", ENGINE_SQLITE3)
+    out_path = config.get("path", DEFAULT_PATH)
+    project_directory = config.get("project_directory", DEFAULT_PROJECT_DIRECTORY)
+    project_name = config.get("project_name", DEFAULT_PROJECT_NAME)
+    rest_api = config.get("rest_api", False)
+    server_port = config.get("server_port", DEFAULT_SERVER_PORT)
+    service_name = config.get("service_name", DEFAULT_SERVICE_NAME)
+    verbose = config.get("verbose", False)
 
     __print_message("Creating directory " + out_path + " ...", verbose=verbose)
 
@@ -131,7 +138,7 @@ def generate_project(
     __print_message(out_path + " created!", verbose=verbose)
 
     __begin_gen_message(
-        "Django project " + project_name + " in " + out_path, verbose=verbose
+        "django project " + project_name + " in " + out_path, verbose=verbose
     )
 
     try:
@@ -143,36 +150,45 @@ def generate_project(
         # https://stackoverflow.com/a/2837319
         op.communicate()
     except Exception as e:
-        print(e)
-        exit(1)
+        raise e
 
-    __end_gen_message("Django project " + project_name, verbose=verbose)
+    __end_gen_message("django project " + project_name, verbose=verbose)
 
-    # Get inside the Django project's main directory
+    # Get inside the django project's main directory
     settings_path = out_path + "/" + project_name + "/" + project_name
 
     __begin_gen_message("Settings file", verbose=verbose)
 
-    SettingsGen().generate_settings_file(path=settings_path)
+    SettingsGen().generate_settings_file(
+        path=settings_path, project_name=project_name, engine=engine
+    )
 
     __end_gen_message("Settings file", verbose=verbose)
 
+    __begin_gen_message("Requirements file", verbose=verbose)
+
+    RequirementsGen().generate_requirements_file(
+        path=out_path, project_directory=project_directory
+    )
+
+    __end_gen_message("Requirements file", verbose=verbose)
+
     __begin_gen_message("Environment variable files", verbose=verbose)
 
-    EnvGen().generate_all_env_files(path=path)
+    EnvGen().generate_all_env_files(path=out_path)
 
     __end_gen_message("Environment variable files", verbose=verbose)
 
     __begin_gen_message("Git ignore file", verbose=verbose)
 
-    GitIgnoreGen().generate_gitignore_file(path=path)
+    GitIgnoreGen().generate_gitignore_file(path=out_path)
 
     __end_gen_message("Git ignore file", verbose=verbose)
 
     __begin_gen_message("Nginx files", verbose=verbose)
 
     NginxGen().generate_nginx_files(
-        path=path, server_port=server_port, service_name=service_name
+        path=out_path, server_port=server_port, service_name=service_name
     )
 
     __end_gen_message("Nginx files", verbose=verbose)
@@ -180,7 +196,7 @@ def generate_project(
     __begin_gen_message("Dockerfiles and docker-compose files", verbose=verbose)
 
     DockerGen().generate_docker_files(
-        path=path,
+        path=out_path,
         project_directory=project_directory,
         project_name=project_name,
         server_port=server_port,
@@ -194,16 +210,9 @@ def generate_project(
 
 
 def main():
-    args = parse_args(sys.argv[1:])
+    config = parse_args(sys.argv[1:])
 
-    generate_project(
-        path=args["path"],
-        service_name=args["service_name"],
-        server_port=args["server_port"],
-        project_name=args["project_name"],
-        project_directory=args["project_directory"],
-        verbose=args["verbose"],
-    )
+    generate_project(config=config)
 
 
 if __name__ == "__main__":

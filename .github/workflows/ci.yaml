@@ -24,6 +24,7 @@ jobs:
           python-version: 3.8.5
       - name: Generate coverage report
         run: |
+          make setup
           make install
           make test
       - name: Upload coverage to Codecov

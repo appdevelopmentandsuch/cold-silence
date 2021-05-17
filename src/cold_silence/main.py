@@ -38,7 +38,7 @@ def __end_gen_message(message, verbose):
 
 
 def parse_args(args):
-    print(args)
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument(

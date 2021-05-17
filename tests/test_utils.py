@@ -1,7 +1,7 @@
 import unittest
 import os
 from cold_silence.utils import DEFAULT_PATH, write_to_file
-import pytest
+
 
 class UtilsTestSuite(unittest.TestCase):
     def test_create_file(self):

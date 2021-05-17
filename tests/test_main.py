@@ -3,6 +3,7 @@ from cold_silence.utils import DEFAULT_PATH, DEFAULT_PROJECT_DIRECTORY
 import os
 import unittest
 
+
 class MainTestSuite(unittest.TestCase):
     def test_create_project(self):
 

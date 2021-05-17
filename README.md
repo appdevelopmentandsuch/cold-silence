@@ -6,15 +6,32 @@
 
 Start a new Django project sans boilerplate code.
 
+# Setup
+
+```bash
+cd [project_dir]/src/cold_silence
+pip install -r requirements.txt
+
+OR
+
+cd [project_dir]
+make install
+```
+
 # Quickstart
 
 ```bash
-cd src
+cd [project_dir]/src/cold_silence
 python3 main.py
+
+OR
+
+cd [project_dir]
+make build_default_project
 ```
 
 ```bash
-cd src
+cd [project_dir]/src/cold_silence
 python3 main.py --server_port 8080 --project_name my_project --service_name my_service --project_directory my_project --verbose
 ```
 
@@ -40,6 +57,23 @@ python3 main.py --server_port 8080 --project_name my_project --service_name my_s
 │   │       ├── urls.py
 │   │       └── wsgi.py
 │   └── staging.env
+```
+
+# Testing
+
+To run tests, run the following
+
+```bash
+cd [project_dir]
+pytest --cov cold_silence --cov-report=xml
+
+OR
+
+make test # This will generate several artifacts, along with a project, which can be removed with make clean
+
+OR
+
+make test_clean # This will automatically remove the generated artifacts and generated project
 ```
 
 # Info

@@ -3,3 +3,4 @@ src/__pycache__
 .coverage
 coverage.xml
 .pytest_cache
+project_output

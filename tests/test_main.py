@@ -1,7 +1,7 @@
 import unittest
 import os
 from cold_silence.utils import DEFAULT_PATH, DEFAULT_PROJECT_DIRECTORY
-from cold_silence.main import generate_project, main
+from cold_silence.main import generate_project, parse_args
 
 
 class MainTestSuite(unittest.TestCase):
@@ -113,7 +113,28 @@ class MainTestSuite(unittest.TestCase):
 
     def test_create_project_from_main(self):
 
-        main()
+        args = parse_args(
+            [
+                "--server_port",
+                "8080",
+                "--project_name",
+                "my_project",
+                "--service_name",
+                "my_service",
+                "--project_directory",
+                "my_project",
+                "--verbose",
+            ]
+        )
+
+        generate_project(
+            path=args["path"],
+            service_name=args["service_name"],
+            server_port=args["server_port"],
+            project_name=args["project_name"],
+            project_directory=args["project_directory"],
+            verbose=args["verbose"],
+        )
 
         self.assertEqual(
             True,

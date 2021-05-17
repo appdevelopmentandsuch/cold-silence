@@ -2,6 +2,8 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/appdevelopmentandsuch/cold-silence/badge)](https://www.codefactor.io/repository/github/appdevelopmentandsuch/cold-silence)
 
+[![codecov](https://codecov.io/gh/appdevelopmentandsuch/cold-silence/branch/main/graph/badge.svg?token=7Q2WY19HEA)](https://codecov.io/gh/appdevelopmentandsuch/cold-silence)
+
 Start a new Django project sans boilerplate code.
 
 # Quickstart

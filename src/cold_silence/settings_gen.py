@@ -31,7 +31,7 @@ DATABASES = {{
             engine, db_config
         )
 
-    def __generate_installed_apps_content(rest_api=False):
+    def __generate_installed_apps_content(self, rest_api=False):
         installed_apps = [
             "django.contrib.admin",
             "django.contrib.auth",
@@ -43,7 +43,10 @@ DATABASES = {{
 
         if rest_api:
             installed_apps.append("rest_framework")
-        return "[{0}]".format(",".join(installed_apps))
+
+        content = "".join("\n\"{0}\",".format(app) for app in installed_apps)
+
+        return "[{0}]".format(content)
 
     def __generate_settings_file_content(
         self, project_name=DEFAULT_PROJECT_NAME, engine=ENGINE_SQLITE3, rest_api=False

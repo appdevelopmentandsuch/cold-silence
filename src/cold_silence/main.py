@@ -17,10 +17,10 @@ from cold_silence.utils import (
     verify_or_install_django,
     verify_or_install_gunicorn,
     verify_or_install_rest_framework,
+    verify_or_install_black,
 )
 import argparse
 import sys
-
 
 def __print_message(message, verbose):
     if verbose:
@@ -117,6 +117,7 @@ def generate_project(config=DEFAULT_CONFIG):
     verify_or_install_django()
     verify_or_install_gunicorn()
     verify_or_install_rest_framework()
+    verify_or_install_black()
 
     engine = config.get("engine", ENGINE_SQLITE3)
     out_path = config.get("path", DEFAULT_PATH)
@@ -160,7 +161,7 @@ def generate_project(config=DEFAULT_CONFIG):
     __begin_gen_message("Settings file", verbose=verbose)
 
     SettingsGen().generate_settings_file(
-        path=settings_path, project_name=project_name, engine=engine
+        path=settings_path, project_name=project_name, engine=engine, rest_api=rest_api
     )
 
     __end_gen_message("Settings file", verbose=verbose)
@@ -204,6 +205,17 @@ def generate_project(config=DEFAULT_CONFIG):
     )
 
     __end_gen_message("Dockerfiles and docker-compose files", verbose=verbose)
+
+    try:
+        op = pop(
+            ["/usr/bin/python3", "-m", "black", "."],
+            shell=False,
+            cwd=out_path,
+        )
+        # https://stackoverflow.com/a/2837319
+        op.communicate()
+    except Exception as e:
+        raise e
 
     print("Project generation complete, you're ready to get started!")
     print("Happy programming!")

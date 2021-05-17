@@ -9,6 +9,8 @@ Start a new Django project sans boilerplate code.
 # Setup
 
 ```bash
+cd [project_dir]
+pip install .
 cd [project_dir]/src/cold_silence
 pip install -r requirements.txt
 
@@ -16,6 +18,7 @@ OR
 
 cd [project_dir]
 make install
+make setup
 ```
 
 # Quickstart

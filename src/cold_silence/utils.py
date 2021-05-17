@@ -59,6 +59,12 @@ def __verify_gunicorn_version():
     version = gunicorn.__version__
     print("Proceeding using gunicorn version: " + version)
 
+def __verify_black_version():
+    import black
+
+    version = black.__version__
+    print("Proceeding using black version: " + version)
+
 
 def verify_or_install_django():
     try:
@@ -104,6 +110,19 @@ def verify_or_install_gunicorn():
         except Exception as e:
             raise e
 
+def verify_or_install_black():
+    try:
+        __verify_black_version()
+    except Exception as e:
+        try:
+            print(
+                "Can't find black, attempting to install using `python3 -m pip install black`..."
+            )
+
+            pip.main(["install", "black"])
+            __verify_black_version()
+        except Exception as e:
+            raise e
 
 def write_to_file(file_path, contents):
     if not os.path.exists(os.path.dirname(file_path)):

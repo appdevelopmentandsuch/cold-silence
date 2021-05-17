@@ -14,8 +14,11 @@ test_clean:
 build_default_project:
 	python3 src/cold_silence/main.py
 
-install:
+setup:
 	pip install -r requirements.txt
 
 format:
 	black ./
+
+install_package:
+	pip install .

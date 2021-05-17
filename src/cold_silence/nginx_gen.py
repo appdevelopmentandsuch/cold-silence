@@ -1,4 +1,9 @@
-from cold_silence.utils import write_to_file, DEFAULT_PATH, DEFAULT_SERVICE_NAME, DEFAULT_SERVER_PORT
+from cold_silence.utils import (
+    write_to_file,
+    DEFAULT_PATH,
+    DEFAULT_SERVICE_NAME,
+    DEFAULT_SERVER_PORT,
+)
 
 
 class NginxGen:

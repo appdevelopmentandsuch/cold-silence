@@ -15,6 +15,7 @@ jobs:
     env:
       OS: ${{ matrix.os }}
       PYTHON: '3.8.5'
+      PYTHONPATH: src
     steps:
       - uses: actions/checkout@master
       - name: Setup Python
@@ -25,8 +26,7 @@ jobs:
         run: |
           pip install pytest
           pip install pytest-cov
-          cd src
-          pytest tests.py --cov=./ --cov-report=xml
+          pytest --cov cold_silence --cov-report=xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:

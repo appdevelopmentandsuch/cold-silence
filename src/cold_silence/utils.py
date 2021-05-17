@@ -3,7 +3,7 @@ import errno
 import os
 import random
 
-DEFAULT_PATH = "../project_output"
+DEFAULT_PATH = "project_output"
 
 DEFAULT_SERVICE_NAME = "django"
 

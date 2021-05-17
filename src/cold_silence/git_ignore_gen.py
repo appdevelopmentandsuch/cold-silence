@@ -1,4 +1,4 @@
-from utils import write_to_file, DEFAULT_PATH
+from cold_silence.utils import write_to_file, DEFAULT_PATH
 
 
 class GitIgnoreGen:

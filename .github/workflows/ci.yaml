@@ -24,11 +24,15 @@ jobs:
           python-version: 3.8.5
       - name: Generate coverage report
         run: |
-          pip install -r requirements.txt
-          pytest --cov cold_silence --cov-report=xml
+          make setup
+          make install
+          make test
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           verbose: true
+      - name: Clean up
+        run: |
+          make clean

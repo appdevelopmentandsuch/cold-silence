@@ -4,7 +4,6 @@ from cold_silence.utils import (
     DEFAULT_PROJECT_NAME,
     ENGINE_SQLITE3,
 )
-import os
 
 
 class SettingsGen:
@@ -32,8 +31,25 @@ DATABASES = {{
             engine, db_config
         )
 
+    def __generate_installed_apps_content(self, rest_api=False):
+        installed_apps = [
+            "django.contrib.admin",
+            "django.contrib.auth",
+            "django.contrib.contenttypes",
+            "django.contrib.sessions",
+            "django.contrib.messages",
+            "django.contrib.staticfiles",
+        ]
+
+        if rest_api:
+            installed_apps.append("rest_framework")
+
+        content = "".join("\n\"{0}\",".format(app) for app in installed_apps)
+
+        return "[{0}]".format(content)
+
     def __generate_settings_file_content(
-        self, project_name=DEFAULT_PROJECT_NAME, engine=ENGINE_SQLITE3
+        self, project_name=DEFAULT_PROJECT_NAME, engine=ENGINE_SQLITE3, rest_api=False
     ):
         try:
             import django
@@ -46,6 +62,7 @@ DATABASES = {{
 
             db_config = self.__generate_database_config(engine=engine)
 
+            installed_apps = self.__generate_installed_apps_content(rest_api=rest_api)
             content = """
 \"\"\"
 Django settings for {0} project.
@@ -84,14 +101,7 @@ ALLOWED_HOSTS = [i for i in get_env_value("ALLOWED_HOSTS").split(",")]
 
 # Application definition
 
-INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-]
+INSTALLED_APPS = {4}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -151,7 +161,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
         """.format(
-                project_name, django.__version__, django_major_version, db_config
+                project_name,
+                django.__version__,
+                django_major_version,
+                db_config,
+                installed_apps,
             )
 
         except Exception as e:
@@ -164,11 +178,12 @@ STATIC_URL = "/static/"
         path=DEFAULT_PATH,
         project_name=DEFAULT_PROJECT_NAME,
         engine=ENGINE_SQLITE3,
+        rest_api=False,
     ):
         settings_file_path = "{0}/settings.py".format(path)
 
         content = self.__generate_settings_file_content(
-            project_name=project_name, engine=engine
+            project_name=project_name, engine=engine, rest_api=rest_api
         )
 
         write_to_file(settings_file_path, contents=content)

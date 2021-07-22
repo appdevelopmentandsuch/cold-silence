@@ -1,9 +1,7 @@
 # cold-silence
 
 [![CodeFactor](https://www.codefactor.io/repository/github/appdevelopmentandsuch/cold-silence/badge)](https://www.codefactor.io/repository/github/appdevelopmentandsuch/cold-silence)
-
 [![codecov](https://codecov.io/gh/appdevelopmentandsuch/cold-silence/branch/main/graph/badge.svg?token=7Q2WY19HEA)](https://codecov.io/gh/appdevelopmentandsuch/cold-silence)
-
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/appdevelopmentandsuch/cold-silence/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/appdevelopmentandsuch/cold-silence.svg)](https://github.com/appdevelopmentandsuch/cold-silence/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/appdevelopmentandsuch/cold-silence.svg)](https://GitHub.com/appdevelopmentandsuch/cold-silence/releases/)

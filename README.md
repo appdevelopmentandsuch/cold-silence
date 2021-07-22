@@ -4,6 +4,15 @@
 
 [![codecov](https://codecov.io/gh/appdevelopmentandsuch/cold-silence/branch/main/graph/badge.svg?token=7Q2WY19HEA)](https://codecov.io/gh/appdevelopmentandsuch/cold-silence)
 
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/appdevelopmentandsuch/cold-silence/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/appdevelopmentandsuch/cold-silence.svg)](https://github.com/appdevelopmentandsuch/cold-silence/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/appdevelopmentandsuch/cold-silence.svg)](https://GitHub.com/appdevelopmentandsuch/cold-silence/releases/)
+[![GitHub tag](https://img.shields.io/github/tag/appdevelopmentandsuch/cold-silence.svg)](https://GitHub.com/appdevelopmentandsuch/cold-silence/tags/)
+[![Github all releases](https://img.shields.io/github/downloads/appdevelopmentandsuch/cold-silence/total.svg)](https://GitHub.com/appdevelopmentandsuch/cold-silence/releases/)
+[![GitHub stars](https://img.shields.io/github/stars/appdevelopmentandsuch/cold-silence.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/appdevelopmentandsuch/cold-silence/stargazers/)
+[![GitHub issues](https://img.shields.io/github/issues/appdevelopmentandsuch/cold-silence.svg)](https://GitHub.com/appdevelopmentandsuch/cold-silence/issues/)
+[![GitHub issues-closed](https://img.shields.io/github/issues-closed/appdevelopmentandsuch/cold-silence.svg)](https://GitHub.com/appdevelopmentandsuch/cold-silence/issues?q=is%3Aissue+is%3Aclosed)
+
 Start a new Django project sans boilerplate code.
 
 # Quickstart
